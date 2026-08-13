@@ -3,9 +3,15 @@
   const trigger = document.querySelector(".footer-trigger");
   if (!footer || !trigger) return;
 
+  let appliedHeight = -1;
+
   // Keeps the spacer in sync so the fixed footer reveals over exactly its own height
   function syncTriggerHeight() {
-    trigger.style.height = `${footer.offsetHeight}px`;
+    const nextHeight = Math.ceil(footer.getBoundingClientRect().height);
+    if (nextHeight === appliedHeight) return;
+    appliedHeight = nextHeight;
+    trigger.style.height = `${nextHeight}px`;
+    window.dispatchEvent(new Event("lenis:resize"));
   }
 
   syncTriggerHeight();

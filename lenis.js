@@ -6,26 +6,52 @@
     smoothTouch: false,
   });
 
-  // Update Lenis on each animation frame
-  function raf(time) {
-    lenis.raf(time);
+  let resizeQueued = false;
+  function queueResize() {
+    if (resizeQueued) return;
+    resizeQueued = true;
+    requestAnimationFrame(() => {
+      resizeQueued = false;
+      lenis.resize();
+    });
+  }
+
+  window.addEventListener("lenis:resize", queueResize);
+
+  // Finsweet CMS Load renders every infinite-scroll batch asynchronously.
+  window.fsAttributes = window.fsAttributes || [];
+  window.fsAttributes.push([
+    "cmsload",
+    (listInstances) => {
+      listInstances.forEach((listInstance) => {
+        listInstance.on("renderitems", queueResize);
+      });
+      queueResize();
+    },
+  ]);
+
+  // Also cover async CMS insertions that happen after Finsweet emits its callback.
+  if ("MutationObserver" in window) {
+    const contentObserver = new MutationObserver(queueResize);
+    contentObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if ("ResizeObserver" in window) {
+    const sizeObserver = new ResizeObserver(queueResize);
+    sizeObserver.observe(document.body);
+  }
+
+  if (window.gsap && window.ScrollTrigger) {
+    lenis.on("scroll", window.ScrollTrigger.update);
+    window.gsap.ticker.add((time) => lenis.raf(time * 1000));
+    window.gsap.ticker.lagSmoothing(0);
+  } else {
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
     requestAnimationFrame(raf);
   }
-  requestAnimationFrame(raf);
 
-  // Optional: Force scroll bounds update once after page load
-  setTimeout(() => {
-    window.dispatchEvent(new Event('resize'));
-  }, 1000);
-
-  // MutationObserver to watch for changes in the FAQ section (or entire page)
-  const observer = new MutationObserver(() => {
-    lenis.resize();
-  });
-
-  // You can narrow this to a specific container if preferred
-  observer.observe(document.body, {
-    attributes: true,
-    childList: true,
-    subtree: true,
-  });
+  window.addEventListener("resize", queueResize, { passive: true });
+  document.fonts?.ready.then(queueResize);
