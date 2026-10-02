@@ -1,26 +1,46 @@
-  document.addEventListener("DOMContentLoaded", function() {
-    // Select the elements
-    const elements = document.querySelectorAll(".nav_button, .nav-link, .menu_lottie, .fs_nav, .navbar_static_background");
-    
-    // Track the state so we don't spam the DOM
-    let isScrolled = false;
+document.addEventListener("DOMContentLoaded", function () {
+  // Avoid double-binding if this script is injected/loaded more than once.
+  if (window.__exclusiveResidentialScrollToggleInitialized) return;
+  window.__exclusiveResidentialScrollToggleInitialized = true;
 
-    function toggleScrolledClass() {
-      const scrollPos = window.scrollY;
-      const threshold = 20; // Increased slightly to stop the "flick"
+  // Select only elements opted into scroll-state toggling.
+  const elements = document.querySelectorAll('[toggle="scrolled"]');
+  if (!elements.length) return;
 
-      if (scrollPos > threshold && !isScrolled) {
-        elements.forEach(el => el.classList.add("scrolled"));
-        isScrolled = true;
-      } else if (scrollPos <= threshold && isScrolled) {
-        elements.forEach(el => el.classList.remove("scrolled"));
-        isScrolled = false;
-      }
+  // Add/remove hysteresis prevents rapid toggling around the boundary.
+  const addThreshold = 20;
+  const removeThreshold = 10;
+
+  // Track the state so we don't spam the DOM.
+  let isScrolled = false;
+  let ticking = false;
+
+  function updateScrolledClass() {
+    ticking = false;
+
+    const scrollPos = window.scrollY || window.pageYOffset || 0;
+
+    if (!isScrolled && scrollPos > addThreshold) {
+      elements.forEach((el) => el.classList.add("scrolled"));
+      isScrolled = true;
+      return;
     }
 
-    // Run once on load
-    toggleScrolledClass();
+    if (isScrolled && scrollPos <= removeThreshold) {
+      elements.forEach((el) => el.classList.remove("scrolled"));
+      isScrolled = false;
+    }
+  }
 
-    // Listen for scroll
-    window.addEventListener("scroll", toggleScrolledClass, { passive: true });
-  });
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(updateScrolledClass);
+  }
+
+  // Run once on load.
+  updateScrolledClass();
+
+  // Listen for scroll.
+  window.addEventListener("scroll", onScroll, { passive: true });
+});
