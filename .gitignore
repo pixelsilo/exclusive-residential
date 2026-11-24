@@ -1,1 +1,3 @@
 node_modules/
+# Licensed font files: never commit to this public repo
+fonts/

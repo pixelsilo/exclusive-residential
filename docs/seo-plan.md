@@ -142,16 +142,16 @@ Everything goes to webflow.io staging only. Nothing is published live.
 - A1: logo links labelled; Portfolio card links labelled from the CMS name; featured-case-studies cards labelled by `site.js` (`[data-card]` hooks).
 - A2: `<main>` on every page and both templates. A3: dark text on the yellow current-page nav link (code_css embed). A4: footer logo links to Home.
 - P2: Contact hero `loading="eager"` + `fetchpriority="high"` + alt text. P6: Google Map loads only near the viewport (site.js v1.1.0).
+- E3: case-study template JSON-LD (WebPage + CreativeWork + Place + BreadcrumbList) bound to CMS fields; checked on 33 Portland Place and Mayfair. Token format that works in the schema field: `{{wf {&quot;path&quot;:&quot;name&quot;,&quot;type&quot;:&quot;PlainText&quot;} }}` (no backslash before the closing brace).
 - E1/E2: JSON-LD on Home (GeneralContractor, WebSite, WebPage), Residential/Projects/Aftercare (Service + BreadcrumbList), About (AboutPage + directors), Contact (ContactPage + contact point), Portfolio (CollectionPage). URLs assume `https://excl.group`.
 - Alert bar wired to the `alert` module (`data-module="alert"`, `data-alert-close`).
 
 **Blocked or needs Luke**
-- E3 case-study schema: the API stores CMS tokens but they render empty, so it was removed. Paste `snippets/case-study-schema.md` in the Designer.
 - P1 hero headline: the char-split fade (interactions `load-1`, `sector-load`, `load-about`) keeps the `h1` hidden until JS runs. That's the main remaining mobile LCP cost, and changing it is a design call.
-- P5 fonts (WOFF2 + remove Bitter): Site settings → Fonts.
-- S9 copyright year: the API can't edit the footer's `-` placeholder text; type the year in the Designer.
+- P5 fonts: Latin-subset WOFF2 files are in `fonts/` (git-ignored: licensed). Upload them in Site settings → Fonts in place of the OTFs, and remove Bitter.
+- S9 copyright year: already dynamic (`[copyright="year"]`, `src/global/copyright-year.js`). Optional: replace the `-` placeholder with the current year so non-JS crawlers don't see "© -"; JS keeps it current.
 
 **Content the client needs to supply (found during the audit)**
 - Lorem ipsum body copy on 7 published case studies (Mayfair, South Kensington, Marylebone Hotel, 39-40 Lowndes Square, Peninsula Heights, 1-5 Grosvenor Apartments, 33 Portland Place) and on 3 About timeline entries.
-- 18 non-clickable projects have published pages saying "To be provided seperatley".
+- 18 non-featured projects have template pages, but they are noindexed and not linked (they only appear in lists), so they're out of search by design.
 - Privacy and Cookie Policy content.
