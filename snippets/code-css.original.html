@@ -1,0 +1,82 @@
+<!-- responsive sizing -->
+<style>
+  :root {
+    --font-from: 16;
+    --font-to: 17;
+    --vw-from: calc(1920 / 100);
+    --vw-to: calc(2400 / 100);
+    --coefficient: calc((var(--font-to) - var(--font-from)) / (var(--vw-to) - var(--vw-from)));
+    --base: calc((var(--font-from) - var(--vw-from) * var(--coefficient)) / 16);
+  }
+
+  html {
+    font-size: calc(var(--base) * 1rem + var(--coefficient) * 1vw);
+  }
+
+  @media screen and (max-width: 1920px) {
+    :root {
+      --font-from: 15;
+      --font-to: 16;
+      --vw-from: calc(1440 / 100);
+      --vw-to: calc(1920 / 100);
+      }
+  }
+
+  @media screen and (max-width: 1440px) {
+    :root {
+      --font-from: 13;
+      --font-to: 14;
+      --vw-from: calc(479 / 100);
+      --vw-to: calc(1440 / 100);
+      }
+  }
+
+  @media screen and (max-width: 479px) {
+    :root {
+      --font-from: 11;
+      --font-to: 12;
+      --vw-from: calc(1 / 100);
+      --vw-to: calc(479 / 100);
+      }
+  }
+</style>
+<!-- utility styles -->
+<style>
+* {
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+.w-richtext>:first-child {
+	margin-top: 0;
+}
+.w-richtext>:last-child, .w-richtext ol li:last-child, .w-richtext ul li:last-child {
+  margin-bottom: 0;
+}
+a,
+.w-tab-link,
+.w-nav-link,
+.w-dropdown-btn,
+.w-dropdown-toggle,
+.w-dropdown-link
+{
+color: inherit;
+}
+main:focus-visible {
+  outline: -webkit-focus-ring-color auto 0px;
+}
+.form-input {
+     -webkit-appearance: none;
+}
+.w-slider-dot {
+  background: #dbdbdb;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: 0px !important;
+  margin-bottom: 0px !important;
+  margin-right: 0px !important;
+  transition: background 600ms cubic-bezier(.23, 1, .32, 1);
+}
+.w-slider-dot.w-active {
+  background: #0095ff;
+}
+</style>

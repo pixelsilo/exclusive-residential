@@ -17,7 +17,7 @@ Then open the Webflow site with `?dev` on the URL. That browser loads `http://12
 - Hook JS to attributes, not Webflow classes or IDs. (`.footer`, `.footer-trigger` and `.map` are still class hooks carried over from the old scripts; move them to attributes when those elements are next touched.)
 - Site-wide behaviour lives in `src/global/` and is listed in `GLOBALS` in `src/main.js`.
 - Opt-in modules live in `src/modules/`, are registered in `MODULES`, and mount on `[data-module="<name>"]`. A module is `export default function (root) {}` and only queries inside `root`. `data-ready` on a root means it has been initialised.
-- **CSS does not live in this repo.** It belongs in a Webflow HTML embed so it previews in the Designer.
+- **CSS does not live in this repo.** Site-wide CSS is in the `code_css` HTML embed inside the hidden `code-snippets` component (on every page), so it previews in the Designer. That includes the Swiper slider rules, which only apply once `site.js` adds the `swiper` classes.
 
 ## What's in the bundle
 
@@ -52,9 +52,10 @@ Rollback: set `VERSION` back to the previous tag and republish. Never move or re
 ## Snippets
 
 - `snippets/loader.html`: the loader for the Webflow Footer (source of truth).
-- `snippets/footer.original.html`, `snippets/head.original.html`: the site's custom code before the move, kept for rollback.
+- `snippets/footer.original.html`, `snippets/head.original.html`: the site's custom code before the move, kept for rollback. Head custom code is now empty.
+- `snippets/code-css.original.html`: the `code_css` embed before the Swiper rules were appended.
 - `snippets/comingsoon.unused.js`: "Coming soon" tooltip for `href="#"` links. It was never loaded on the site; port it into `src/` if it's wanted.
 
 ## Legacy files (delete once the loader is live)
 
-`lenis.js`, `navbar.js`, `alert.js`, `core.js`, `swiper.js`, `map.js`, `copyright.js` and `swiper.css` in the repo root are what the old footer loads from `@main`. They stay until the loader replaces that footer, and `swiper.css` until its rules are in a Webflow embed.
+`lenis.js`, `navbar.js`, `alert.js`, `core.js`, `swiper.js`, `map.js`, `copyright.js` and `swiper.css` in the repo root are what the old custom code loaded from `@main`. Nothing on staging loads them any more (the loader and the `code_css` embed replaced them); delete them once you're sure.
