@@ -131,3 +131,27 @@ Titles are 60 characters or fewer and descriptions 160 or fewer (lengths counted
 6. **Re-run Lighthouse** (median of 3, mobile and desktop) on all 8 pages, and report before and after.
 
 Everything goes to webflow.io staging only. Nothing is published live.
+
+## 6. Status (24 Nov 2026, staging only)
+
+**Done and checked on exclgroup.webflow.io**
+- S1/S2: brand and new titles/descriptions on every page. Legal template has a proper title and description.
+- S3: case-study titles `{Name} | Exclusive Construction Group`; descriptions written for all 25 projects (CMS **Meta Description** field, bound to the template).
+- S4: About now has one `h1` (eyebrow and dark-section title h2, timeline entries h3); Portfolio has a visually hidden `h1` (class `sr-only`).
+- S6: Old Home, Styleguide and video-holder set to draft (404 on staging).
+- A1: logo links labelled; Portfolio card links labelled from the CMS name; featured-case-studies cards labelled by `site.js` (`[data-card]` hooks).
+- A2: `<main>` on every page and both templates. A3: dark text on the yellow current-page nav link (code_css embed). A4: footer logo links to Home.
+- P2: Contact hero `loading="eager"` + `fetchpriority="high"` + alt text. P6: Google Map loads only near the viewport (site.js v1.1.0).
+- E1/E2: JSON-LD on Home (GeneralContractor, WebSite, WebPage), Residential/Projects/Aftercare (Service + BreadcrumbList), About (AboutPage + directors), Contact (ContactPage + contact point), Portfolio (CollectionPage). URLs assume `https://excl.group`.
+- Alert bar wired to the `alert` module (`data-module="alert"`, `data-alert-close`).
+
+**Blocked or needs Luke**
+- E3 case-study schema: the API stores CMS tokens but they render empty, so it was removed. Paste `snippets/case-study-schema.md` in the Designer.
+- P1 hero headline: the char-split fade (interactions `load-1`, `sector-load`, `load-about`) keeps the `h1` hidden until JS runs. That's the main remaining mobile LCP cost, and changing it is a design call.
+- P5 fonts (WOFF2 + remove Bitter): Site settings → Fonts.
+- S9 copyright year: the API can't edit the footer's `-` placeholder text; type the year in the Designer.
+
+**Content the client needs to supply (found during the audit)**
+- Lorem ipsum body copy on 7 published case studies (Mayfair, South Kensington, Marylebone Hotel, 39-40 Lowndes Square, Peninsula Heights, 1-5 Grosvenor Apartments, 33 Portland Place) and on 3 About timeline entries.
+- 18 non-clickable projects have published pages saying "To be provided seperatley".
+- Privacy and Cookie Policy content.
