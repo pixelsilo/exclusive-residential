@@ -30,6 +30,7 @@ Then open the Webflow site with `?dev` on the URL. That browser loads `http://12
 | `global/lottie-resize.js` | every page | Resizes Webflow Lotties with the window. |
 | `global/sliders.js` | `[slider="section"]` | Swiper sliders (Case Studies template). Settings are attributes; see the file header. |
 | `modules/alert.js` | `[data-module="alert"]` + `[data-alert-close]` | Dismissible alert bar, remembered 180 days. Not on any page yet. |
+| `modules/consent.js` | `[data-module="consent"]` (banner), `[data-consent-open]`, `window.ecgConsent` | Cookie consent: API, gating and banner. **Switched off until the banner component is published in Webflow.** See `docs/consent.md`, `docs/cookies.md`, `snippets/consent-banner.html`. |
 | `modules/map.js` | `[data-module="map"]` (or `.map` for now) | Google Map on Contact with the office pin and a directions button. |
 
 ## Release

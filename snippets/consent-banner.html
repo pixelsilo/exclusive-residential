@@ -1,0 +1,130 @@
+<!--
+  DRAFT cookie banner for Webflow. Nothing here is live.
+
+  PART 1 (markup) is the structure to build as a Webflow component ("Cookie banner") inside the
+  hidden code-snippets component, so it sits on every page. Build it with Div Blocks, Headings,
+  Paragraphs, Buttons (as DOM `button` elements, type="button") and DOM `input type="checkbox"`
+  elements. Webflow's own Form Checkbox needs a Form block, so don't use it. Keep the data-*
+  attributes exactly as written; classes are only suggestions, restyle freely.
+
+  PART 2 (CSS) goes in the site's `code_css` embed, never in the repo.
+
+  docs/consent.md has the full guide. test/consent/build.mjs injects this file into a copy of the
+  staging Contact page for local testing.
+-->
+
+<!-- ========== PART 1: MARKUP ========== -->
+<div class="consent" data-module="consent" role="dialog" aria-label="Cookie preferences" aria-hidden="true">
+  <div class="consent_panel">
+
+    <!-- Summary view: Accept and Reject must look identical (same class, same size, same weight) -->
+    <div class="consent_view" data-consent-view="summary">
+      <h2 class="consent_title">Cookies</h2>
+      <p class="consent_text">
+        We use essential cookies to make this site work. With your permission we would also like to load
+        content from other providers, such as the map on our Contact page. You can change your choice at any time.
+        <a href="/legal/cookie-policy" class="consent_link">Cookie policy</a>
+      </p>
+      <div class="consent_actions">
+        <button type="button" class="consent_button" data-consent-action="reject-all">Reject all</button>
+        <button type="button" class="consent_button" data-consent-action="accept-all">Accept all</button>
+        <button type="button" class="consent_button is-text" data-consent-action="manage">Manage preferences</button>
+      </div>
+    </div>
+
+    <!-- Manage view: boxes start unticked. Only list categories the site actually uses. -->
+    <div class="consent_view" data-consent-view="manage">
+      <h2 class="consent_title">Cookie preferences</h2>
+      <div class="consent_options">
+        <div class="consent_option">
+          <label class="consent_label">
+            <input type="checkbox" class="consent_checkbox" checked disabled>
+            <span class="consent_option-name">Strictly necessary</span>
+          </label>
+          <p class="consent_option-text">Needed for the site to work and to keep it secure (for example the contact form's spam protection). Always on.</p>
+        </div>
+        <div class="consent_option">
+          <label class="consent_label">
+            <input type="checkbox" class="consent_checkbox" data-consent-toggle="functional">
+            <span class="consent_option-name">Maps and preferences</span>
+          </label>
+          <p class="consent_option-text">Lets us show the Google Map on the Contact page. Loading it shares your IP address with Google.</p>
+        </div>
+        <!-- Add the next three only when the site really uses them -->
+        <!--
+        <div class="consent_option">
+          <label class="consent_label">
+            <input type="checkbox" class="consent_checkbox" data-consent-toggle="embeds">
+            <span class="consent_option-name">Embedded video</span>
+          </label>
+          <p class="consent_option-text">Lets us show videos hosted by Vimeo.</p>
+        </div>
+        <div class="consent_option">
+          <label class="consent_label">
+            <input type="checkbox" class="consent_checkbox" data-consent-toggle="analytics">
+            <span class="consent_option-name">Analytics</span>
+          </label>
+          <p class="consent_option-text">Helps us understand how the site is used, so we can improve it.</p>
+        </div>
+        <div class="consent_option">
+          <label class="consent_label">
+            <input type="checkbox" class="consent_checkbox" data-consent-toggle="marketing">
+            <span class="consent_option-name">Marketing</span>
+          </label>
+          <p class="consent_option-text">Used to measure and personalise advertising.</p>
+        </div>
+        -->
+      </div>
+      <div class="consent_actions">
+        <button type="button" class="consent_button" data-consent-action="reject-all">Reject all</button>
+        <button type="button" class="consent_button" data-consent-action="accept-all">Accept all</button>
+        <button type="button" class="consent_button" data-consent-action="save">Save my choices</button>
+        <button type="button" class="consent_button is-text" data-consent-action="back">Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer and Cookie Policy page: any element with data-consent-open reopens the manage view.
+     In Webflow: add a custom attribute  data-consent-open  (empty value) to a link with href="#". -->
+<!-- <a href="#" class="footer-legal_link" data-consent-open>Cookie settings</a> -->
+
+
+<!-- ========== PART 2: CSS (for the code_css embed) ========== -->
+<style>
+  /* Hidden until the script opens it. In the Designer canvas the script doesn't run, so show everything there. */
+  .consent { display: none; position: fixed; left: 1rem; right: 1rem; bottom: 1rem; z-index: 9999; max-width: 34rem; }
+  .consent.is-visible { display: block; }
+  .wf-design-mode .consent { display: block; position: static; }
+
+  .consent_panel { background: #fff; color: #000; padding: 1.5rem; box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25); }
+  .consent_title { margin: 0 0 0.75rem; font-size: 1.125rem; }
+  .consent_text, .consent_option-text { margin: 0 0 1rem; font-size: 0.875rem; line-height: 1.5; }
+  .consent_link { color: inherit; text-decoration: underline; }
+
+  /* One panel at a time, driven by data-view on the root */
+  .consent_view { display: none; }
+  .consent[data-view="summary"] .consent_view[data-consent-view="summary"],
+  .consent[data-view="manage"] .consent_view[data-consent-view="manage"] { display: block; }
+  .wf-design-mode .consent_view { display: block; margin-bottom: 1.5rem; }
+
+  .consent_options { margin-bottom: 1rem; }
+  .consent_option { margin-bottom: 0.75rem; }
+  .consent_label { display: flex; align-items: center; gap: 0.625rem; font-weight: 600; margin: 0 0 0.25rem; cursor: pointer; }
+  .consent_checkbox { width: 1.125rem; height: 1.125rem; margin: 0; accent-color: #000; }
+  .consent_option-text { margin-bottom: 0; padding-left: 1.75rem; }
+
+  .consent_actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  /* Reject and Accept share this one style on purpose: equal prominence is an ICO requirement */
+  .consent_button { flex: 1 1 auto; padding: 0.75rem 1.25rem; border: 1px solid #000; background: #000; color: #fff; font: inherit; font-size: 0.875rem; cursor: pointer; }
+  .consent_button:hover { background: #fff; color: #000; }
+  .consent_button:focus-visible, .consent_checkbox:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+  .consent_button.is-text { flex: 0 0 auto; background: none; color: inherit; border-color: transparent; text-decoration: underline; padding-left: 0.5rem; padding-right: 0.5rem; }
+
+  /* Click-to-load placeholder that JS puts inside the map (and any future gated embed) */
+  .ecg-consent-placeholder { box-sizing: border-box; width: 100%; height: 100%; min-height: 18rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; text-align: center; background: #f2f2f2; color: #000; }
+  .ecg-consent-placeholder_text { margin: 0; max-width: 28rem; font-size: 0.875rem; line-height: 1.5; }
+  .ecg-consent-placeholder_button { padding: 0.75rem 1.25rem; border: 1px solid #000; background: #000; color: #fff; font: inherit; font-size: 0.875rem; cursor: pointer; }
+  .ecg-consent-placeholder_button:hover { background: #fff; color: #000; }
+</style>

@@ -1,6 +1,8 @@
 // Google Map with the office pin and a "Get directions" button (Contact page).
 // The key is public by design (every visitor's browser receives it), so it must be
 // restricted to the site's domains in Google Cloud.
+import { gateEmbed } from './consent.js';
+
 const API_KEY = 'AIzaSyD2iysmi5G6GtjbNtmjZoFGYocOR3f-_CE';
 const OFFICE = { lat: 51.5203121847596, lng: -0.07874600846277312 };
 const PIN = 'https://cdn.prod.website-files.com/6a68dfaeda21c862740b9dd3/6a7c90d35d74f26a5cefe5e1_exclusive-pin.svg';
@@ -21,7 +23,16 @@ function loadGoogleMaps() {
   return mapsLoading;
 }
 
+// Click-to-load behind the 'functional' consent category once the cookie banner is
+// live (see docs/consent.md). Before that, it loads on page view as it always did.
 export default function map(root) {
+  gateEmbed(root, 'functional', () => renderMap(root), {
+    message: 'This map is provided by Google. Loading it shares your IP address with Google.',
+    button: 'Load map',
+  });
+}
+
+function renderMap(root) {
   loadGoogleMaps()
     .then(() => {
       const { maps } = window.google;
