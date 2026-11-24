@@ -69,10 +69,12 @@ const seedCookie = (ctx, patch) =>
     page.locator(`[data-consent-view="summary"] [data-consent-action="${action}"]`).evaluate((el) => {
       const box = el.getBoundingClientRect();
       const css = getComputedStyle(el);
-      return { cls: el.className, h: Math.round(box.height), font: css.fontWeight + css.fontSize, bg: css.backgroundColor, fg: css.color };
+      return { cls: el.className, w: Math.round(box.width), h: Math.round(box.height), font: css.fontWeight + css.fontSize, bg: css.backgroundColor, fg: css.color };
     });
   const [r, a] = [await look('reject-all'), await look('accept-all')];
-  check('reject and accept look identical', r.cls === a.cls && r.h === a.h && r.font === a.font && r.bg === a.bg && r.fg === a.fg, JSON.stringify([r, a]));
+  // ICO: equal prominence. Same size, weight and font, both solid; colour may differ (Accept yellow, Reject white).
+  const solid = (c) => c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent';
+  check('reject and accept have equal prominence', r.cls === a.cls && r.w === a.w && r.h === a.h && r.font === a.font && solid(r.bg) && solid(a.bg), JSON.stringify([r, a]));
   await page.screenshot({ path: 'test/consent/shot-summary.png' });
   await ctx.close();
 }
