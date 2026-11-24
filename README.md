@@ -52,10 +52,7 @@ Rollback: set `VERSION` back to the previous tag and republish. Never move or re
 ## Snippets
 
 - `snippets/loader.html`: the loader for the Webflow Footer (source of truth).
-- `snippets/footer.original.html`, `snippets/head.original.html`: the site's custom code before the move, kept for rollback. Head custom code is now empty.
+- `snippets/footer.original.html`, `snippets/head.original.html`: the site's custom code before the move, kept for reference. Head custom code is now empty. The root files they point at were deleted after the move; they still exist at commit `708645a` (`https://cdn.jsdelivr.net/gh/pixelsilo/exclusive-residential@708645a/<file>`) if ever needed.
 - `snippets/code-css.original.html`: the `code_css` embed before the Swiper rules were appended.
 - `snippets/comingsoon.unused.js`: "Coming soon" tooltip for `href="#"` links. It was never loaded on the site; port it into `src/` if it's wanted.
 
-## Legacy files (delete once the loader is live)
-
-`lenis.js`, `navbar.js`, `alert.js`, `core.js`, `swiper.js`, `map.js`, `copyright.js` and `swiper.css` in the repo root are what the old custom code loaded from `@main`. Nothing on staging loads them any more (the loader and the `code_css` embed replaced them); delete them once you're sure.
