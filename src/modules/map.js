@@ -21,7 +21,26 @@ function loadGoogleMaps() {
   return mapsLoading;
 }
 
+// Google Maps is ~250 KB of script, so wait until the map is close to the viewport.
+function whenNear(el, fn) {
+  if (!('IntersectionObserver' in window)) return fn();
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        io.disconnect();
+        fn();
+      }
+    },
+    { rootMargin: '400px 0px' },
+  );
+  io.observe(el);
+}
+
 export default function map(root) {
+  whenNear(root, () => render(root));
+}
+
+function render(root) {
   loadGoogleMaps()
     .then(() => {
       const { maps } = window.google;

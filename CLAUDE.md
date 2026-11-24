@@ -21,4 +21,5 @@ Anything drafted for Luke to send (client messages, questions, approval messages
 
 Notes from Luke's corrections, added as we go. Read before starting a job.
 
-- (none yet)
+- The brand is **Exclusive Construction Group** and nothing else. "Exclusive Residential Group" is an old name, so remove it wherever it appears. The disciplines are Residential, Projects (commercial work) and Aftercare. The legal entity in the footer is Exclusive Residential Ltd (company no. 09421240); use it only as `legalName` in schema. (24 Nov 2026)
+- Leave the site's videos alone for now. They may move to Vimeo (hosted via pixelsilo.net), so don't re-encode or lazy-load them, and accept their effect on Lighthouse scores. (24 Nov 2026)

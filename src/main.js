@@ -4,12 +4,13 @@ import navScrolled from './global/nav-scrolled.js';
 import copyrightYear from './global/copyright-year.js';
 import lottieResize from './global/lottie-resize.js';
 import sliders from './global/sliders.js';
+import cardLinks from './global/card-links.js';
 import alertBar from './modules/alert.js';
 import map from './modules/map.js';
 
 // Site-wide behaviour that runs on every page. Order matters: Lenis first, so
 // footer-reveal's "lenis:resize" event has a listener.
-const GLOBALS = [lenis, footerReveal, navScrolled, copyrightYear, lottieResize, sliders];
+const GLOBALS = [lenis, footerReveal, navScrolled, copyrightYear, lottieResize, sliders, cardLinks];
 
 // Opt-in modules, mounted on [data-module="<name>"] roots
 const MODULES = { alert: alertBar, map };
