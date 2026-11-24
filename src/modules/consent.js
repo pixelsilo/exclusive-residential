@@ -22,7 +22,7 @@
 //   gateEmbed(root, 'functional', start) for modules (see map.js).
 
 // Bump when the cookie policy or the list of categories changes: everyone is asked again.
-export const POLICY_VERSION = '1';
+export const POLICY_VERSION = '2'; // 2: Analytics (GA4) added, Nov 2026
 
 // Optional consent log. Empty = off. When set, every saved choice is POSTed as
 // { consentId, timestamp, version, categories } with no IP and no personal data.

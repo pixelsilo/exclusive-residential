@@ -43,7 +43,7 @@ const seedCookie = (ctx, patch) =>
   ctx.addCookies([
     {
       name: 'ecg_consent',
-      value: encodeURIComponent(JSON.stringify({ v: '1', id: 'abc', ts: Date.now(), c: { functional: true, analytics: true, marketing: false, embeds: false }, ...patch })),
+      value: encodeURIComponent(JSON.stringify({ v: '2', id: 'abc', ts: Date.now(), c: { functional: true, analytics: true, marketing: false, embeds: false }, ...patch })),
       url: 'http://127.0.0.1:5600/',
     },
   ]);
@@ -84,7 +84,7 @@ const seedCookie = (ctx, patch) =>
   await page.click('[data-consent-view="summary"] [data-consent-action="reject-all"]');
   const c = await cookie(ctx);
   check('reject: banner closes', !(await bannerVisible(page)));
-  check('reject: cookie records all optional categories false', c && Object.values(c.c).every((v) => v === false) && c.v === '1' && !!c.id && !!c.ts, JSON.stringify(c));
+  check('reject: cookie records all optional categories false', c && Object.values(c.c).every((v) => v === false) && c.v === '2' && !!c.id && !!c.ts, JSON.stringify(c));
   check('reject: map not loaded, gated code dormant', maps.length === 0 && (await page.evaluate(() => !window.__gatedAnalytics)));
   await page.reload({ waitUntil: 'load' });
   await page.waitForTimeout(500);

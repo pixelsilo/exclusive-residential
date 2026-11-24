@@ -14,6 +14,16 @@ const loader = /<script>(?:(?!<\/script>)[\s\S])*?exclusive-residential(?:(?!<\/
 html = html.replace(loader, '<script src="/dist/site.js"></script>');
 if (!html.includes('/dist/site.js')) throw new Error('loader not found in staging HTML');
 
+// Staging now ships the real banner (cookie-banner component). Remove it so the harness
+// tests one banner: the snippet below.
+const start = html.lastIndexOf('<div', html.indexOf('data-cookie-banner'));
+if (start > -1 && html.includes('data-cookie-banner')) {
+  const tag = /<\/?div/g; tag.lastIndex = start; let depth = 0, m;
+  while ((m = tag.exec(html))) { depth += m[0] === '<div' ? 1 : -1; if (depth === 0) break; }
+  const end = html.indexOf('>', m.index) + 1;
+  html = html.slice(0, start) + html.slice(end);
+}
+
 const banner = readFileSync(new URL('../../snippets/consent-banner.html', import.meta.url), 'utf8');
 const extras = `
 <!-- TEST ONLY: footer hook and gated content -->
