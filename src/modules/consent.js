@@ -14,7 +14,7 @@
 //   [data-consent-action]                   accept-all | reject-all | manage | save | back | close
 //   input[type=checkbox][data-consent-toggle="<category>"]
 //                                           one per optional category. Never pre-ticked.
-//   [data-consent-open]                     anywhere on the site: reopens the manage view.
+//   [data-consent-open] or a link to #cookie-settings, anywhere: reopens the manage view.
 //
 // Gating other code once a category is consented:
 //   <script type="text/plain" data-consent-category="analytics" src="..."></script>
@@ -279,7 +279,8 @@ export function initConsent() {
 
   // [data-consent-open] works anywhere, including links added later
   document.addEventListener('click', (event) => {
-    const trigger = event.target.closest?.('[data-consent-open]');
+    // Rich text (CMS) can't carry custom attributes, so a plain link to #cookie-settings works too
+    const trigger = event.target.closest?.('[data-consent-open], a[href$="#cookie-settings"]');
     if (!trigger) return;
     event.preventDefault();
     api.open('manage');
