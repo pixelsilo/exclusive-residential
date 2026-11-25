@@ -7,6 +7,7 @@ import sliders from './global/sliders.js';
 import cardLinks from './global/card-links.js';
 import analytics from './global/analytics.js';
 import caseStudyHero from './global/case-study-hero.js';
+import headingFit from './global/heading-fit.js';
 import alertBar from './modules/alert.js';
 import map from './modules/map.js';
 import consentBanner, { initConsent } from './modules/consent.js';
@@ -14,7 +15,7 @@ import consentBanner, { initConsent } from './modules/consent.js';
 // Site-wide behaviour that runs on every page. Order matters: Lenis first, so
 // footer-reveal's "lenis:resize" event has a listener. initConsent comes before
 // any module so window.ecgConsent exists when the map (or anything gated) mounts.
-const GLOBALS = [lenis, footerReveal, navScrolled, copyrightYear, lottieResize, sliders, cardLinks, caseStudyHero, initConsent, analytics];
+const GLOBALS = [lenis, footerReveal, navScrolled, copyrightYear, lottieResize, sliders, cardLinks, caseStudyHero, headingFit, initConsent, analytics];
 
 // Opt-in modules, mounted on [data-module="<name>"] roots
 const MODULES = { alert: alertBar, map, consent: consentBanner };
