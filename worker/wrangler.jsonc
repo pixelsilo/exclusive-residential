@@ -1,0 +1,10 @@
+{
+  // Video/poster delivery for the site. Deploy: cd worker && npx wrangler deploy
+  "name": "ecg-media",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "exclusive-construction-group" }
+  ]
+}

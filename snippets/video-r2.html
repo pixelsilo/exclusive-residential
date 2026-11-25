@@ -1,0 +1,35 @@
+<!-- Site settings > Custom code > Head. Must stay inline in <head> so it runs before any <video> is parsed.
+     Points every Webflow-hosted site video at Cloudflare R2 (via the ecg-media Worker): the mobile
+     encode at 767px and below, desktop above, plus an R2 poster. Videos not in the map are left alone.
+     Add a video: encode it, upload to R2 under videos/v1/{desktop,mobile,poster}/<name>, add its
+     Webflow file name (between the asset id and _mp4/_webm) to M. -->
+<script>
+(function(){
+  var B='https://ecg-media.luke-3d8.workers.dev/videos/v1/',
+  K=matchMedia('(max-width: 767px)').matches?'mobile':'desktop',
+  M={'er-home-hero_v3':'home-hero','mayfair':'mayfair','south-kensington':'south-kensington','cuttysark':'cutty-sark',
+  '39-40-lowndes-square':'39-40-lowndes-square','33-portland-place':'33-portland-place',
+  'tottenham-hotspur-football-club':'tottenham-hotspur','kling_20260731_VIDEO_add_some_l_2412_0':'33-portland-place-ai',
+  'kling_20260813_VIDEO_add_some_l_1745_0':'peninsula-heights-ai','kling_20260813_VIDEO_add_some_d_1688_0':'olympic-stadium-ai',
+  'kling_20260730_VIDEO_Push_the_c_811_0':'lowndes-square-ai','kling_20260730_VIDEO_add_some_v_2771_0':'shard-viewing-galleries-ai',
+  'kling_20260808_VIDEO_add_a_luxu_1296_0':'projects-ai'};
+  function key(u){if(!u||u.indexOf('website-files.com')<0)return null;
+    var f=decodeURIComponent(u).split('/').pop().replace(/^[0-9a-f]{24}_/,'').replace(/_(mp4|webm)\.(mp4|webm)$/,'');
+    return M[f]||null;}
+  function fix(v){var s=v.querySelectorAll('source'),n=null,i,k;
+    for(i=0;i<s.length;i++){k=key(s[i].getAttribute('src'));if(!k)continue;n=k;
+      if(s[i].dataset.r2)continue;
+      if(/webm/.test(s[i].getAttribute('src'))){s[i].remove();continue;}
+      s[i].dataset.r2=1;s[i].setAttribute('src',B+K+'/'+k+'.mp4');s[i].setAttribute('type','video/mp4');}
+    if(!n)return;
+    v.setAttribute('poster',B+'poster/'+n+'.jpg');
+    v.style.backgroundImage='none';
+    var w=v.closest('[data-video-urls]');if(w){w.setAttribute('data-video-urls',B+K+'/'+n+'.mp4');w.setAttribute('data-poster-url',B+'poster/'+n+'.jpg');}
+    if(v.currentSrc&&v.currentSrc.indexOf(B)<0)v.load();}
+  function scan(r){(r.tagName==='VIDEO'?[r]:r.querySelectorAll?[].slice.call(r.querySelectorAll('video')):[]).forEach(fix);
+    if(r.tagName==='SOURCE'&&r.parentNode&&r.parentNode.tagName==='VIDEO')fix(r.parentNode);}
+  var o=new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(scan);});});
+  o.observe(document.documentElement,{childList:true,subtree:true});
+  document.addEventListener('DOMContentLoaded',function(){scan(document);setTimeout(function(){o.disconnect();},3000);});
+})();
+</script>
