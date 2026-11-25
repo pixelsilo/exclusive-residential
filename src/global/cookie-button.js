@@ -3,7 +3,14 @@
 // Styles live in the code_css embed (.ecg-cookie-btn). CSS hides it while the
 // banner is open; this hides it while the footer (which has its own
 // "Cookie settings" link) is on screen, so it never sits on the footer credit.
-const ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21.6 11.2a3.2 3.2 0 0 1-3.9-3.4 3.2 3.2 0 0 1-3.5-3.9A9.9 9.9 0 0 0 12 3.7a8.3 8.3 0 1 0 9.6 7.5ZM8 9.5A1.5 1.5 0 1 1 8 12.5 1.5 1.5 0 0 1 8 9.5Zm1.5 6a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Zm5-1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm-2.5-4.25a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>';
+// The button is white (set below, over the embed's dark background) so it shows
+// on both light and dark sections. The icon is a gold cookie with a bite and dark
+// chips, coloured in the SVG itself, and sized inline to override the embed's 45%.
+const ICON = '<svg viewBox="0 0 32 32" style="width:62%;height:62%" aria-hidden="true" focusable="false">'
+  + '<defs><mask id="ecg-cookie-bite"><rect width="32" height="32" fill="#fff"/><circle cx="27.5" cy="4.5" r="6.5" fill="#000"/></mask></defs>'
+  + '<circle cx="16" cy="16" r="14" fill="#dcb200" mask="url(#ecg-cookie-bite)"/>'
+  + '<g fill="#1c1c1c"><circle cx="10.5" cy="11.5" r="2.3"/><circle cx="18" cy="15" r="1.7"/><circle cx="11" cy="20.5" r="1.8"/><circle cx="19.5" cy="22.5" r="2.4"/><circle cx="24.5" cy="16" r="1.5"/></g>'
+  + '</svg>';
 
 export default function cookieButton() {
   if (document.querySelector('.ecg-cookie-btn')) return;
@@ -13,6 +20,7 @@ export default function cookieButton() {
   button.setAttribute('data-consent-open', '');
   button.setAttribute('aria-label', 'Cookie settings');
   button.title = 'Cookie settings';
+  button.style.background = '#fff';
   button.innerHTML = ICON;
   document.body.appendChild(button);
 
