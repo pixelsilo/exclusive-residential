@@ -33,6 +33,7 @@ Then open the Webflow site with `?dev` on the URL. That browser loads `http://12
 | `global/copy-email.js` | `.footer a[href^="mailto:"]` | Copy button beside the footer email, with a "Copy to clipboard" / "Copied" tooltip. From v1.6.0. |
 | `modules/alert.js` | `[data-module="alert"]` + `[data-alert-close]` | Dismissible alert bar, remembered 180 days. Not on any page yet. |
 | `modules/consent.js` | `[data-module="consent"]` (banner), `[data-consent-open]`, `window.ecgConsent` | Cookie consent: API, gating and banner. **Switched off until the banner component is published in Webflow.** See `docs/consent.md`, `docs/cookies.md`, `snippets/consent-banner.html`. |
+| `modules/contact-form.js` | `[data-module="contact-form"]` (Contact page form section) | Turns the Webflow form into one sentence ("Hello, I'm [name] from [company]. I'd like to talk to a director about [topic]…"). Moves the existing inputs (names unchanged), adds a Topic select (sent as "Topic"), sizes each blank to its text, makes Company optional, swaps the submit for a .button-style button and checks name, email and phone before Webflow sends. Turnstile and the success/error messages are Webflow's own. From v1.7.0. |
 | `modules/map.js` | `[data-module="map"]` (or `.map` for now) | Google Map on Contact with the office pin and a directions button. |
 
 ## Release

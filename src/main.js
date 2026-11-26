@@ -13,6 +13,7 @@ import cursor from './global/cursor.js';
 import copyEmail from './global/copy-email.js';
 import alertBar from './modules/alert.js';
 import map from './modules/map.js';
+import contactForm from './modules/contact-form.js';
 import consentBanner, { initConsent } from './modules/consent.js';
 
 // Site-wide behaviour that runs on every page. Order matters: Lenis first, so
@@ -21,7 +22,7 @@ import consentBanner, { initConsent } from './modules/consent.js';
 const GLOBALS = [lenis, footerReveal, navScrolled, copyrightYear, lottieResize, sliders, cardLinks, caseStudyHero, headingFit, initConsent, cookieButton, cursor, copyEmail, analytics];
 
 // Opt-in modules, mounted on [data-module="<name>"] roots
-const MODULES = { alert: alertBar, map, consent: consentBanner };
+const MODULES = { alert: alertBar, map, consent: consentBanner, 'contact-form': contactForm };
 
 // Legacy hooks still on the Webflow markup. Remove each line once the element
 // has data-module="<name>" in the Designer.
