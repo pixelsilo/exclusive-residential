@@ -115,10 +115,11 @@ export default function contactForm(root) {
   if (firstRow && firstRow.isConnected && !firstRow.querySelector('input, textarea, select, iframe, .cf-turnstile')) firstRow.remove();
   msgField.prepend(msgLabel);
 
-  // Kicker above the sentence, in place of the old intro column
+  // Kicker above the sentence, in place of the old intro column. The page leads
+  // with the form, so the kicker is the page's h1 unless there's already one.
   const intro = root.querySelector('.heading-copy');
   if (intro) {
-    const kicker = document.createElement('div');
+    const kicker = document.createElement(document.querySelector('h1') ? 'div' : 'h1');
     kicker.className = 'ecg-cf_kicker';
     kicker.textContent = 'Contact our team';
     intro.replaceWith(kicker);
