@@ -1,6 +1,6 @@
 {
   "name": "exclusive-residential-webflow",
-  "version": "1.7.5",
+  "version": "1.7.6",
   "private": true,
   "type": "module",
   "description": "Custom code for the Exclusive Construction Group Webflow site, built with Vite and served via jsDelivr.",

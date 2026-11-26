@@ -9,7 +9,8 @@
 // blanks just keep a fixed width. This adds:
 //   - each blank sized to its text (or its hint while empty)
 //   - the message label and hint following the chosen topic
-//   - a check of name, email and phone before Webflow sends, with [data-cf="error"]
+//   - a check of name, email and phone (a real address, 7-15 digits) before Webflow
+//     sends; [data-cf="error"] says exactly what's missing or wrong
 //   - the Send button built like the site's .button (yellow square swings in,
 //     arrow slides); Webflow's submit input can't hold those, so it's swapped
 //
@@ -22,6 +23,16 @@ const PROMPTS = {
   Aftercare: ['Anything else we should know?', 'The property and what needs looking after'],
   Other: ['What would you like to talk about?', 'Tell us a little more'],
 };
+// What each required blank needs, and how the error message asks for it
+const RULES = {
+  Name: { ok: (v) => /\p{L}.*\p{L}/u.test(v), empty: 'your name', invalid: 'your name' },
+  Email: { ok: (v) => /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)*\.[a-z]{2,}$/i.test(v), empty: 'your email address', invalid: 'a full email address' },
+  // 7 to 15 digits, allowing spaces, brackets, dashes, dots and a leading +
+  Phone: { ok: (v) => /^\+?[\d\s().-]+$/.test(v) && (v.match(/\d/g) || []).length >= 7 && (v.match(/\d/g) || []).length <= 15, empty: 'your phone number', invalid: 'a phone number we can call' },
+};
+// ['a', 'b', 'c'] -> 'a, b and c'
+const listOf = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`);
+
 const ARROW = '<svg viewBox="0 0 22 18" aria-hidden="true"><path fill="currentColor" d="M21.76 8.88c0-.29-.12-.56-.35-.78L13.64.35C13.38.09 13.14 0 12.86 0c-.58 0-1.02.42-1.02 1.01 0 .28.09.55.28.74l2.62 2.67 4.65 4.24.24-.59-3.77-.23H1.03C.42 7.84 0 8.27 0 8.88s.42 1.04 1.03 1.04h14.83l3.77-.23-.24-.58-4.65 4.23-2.62 2.67c-.19.18-.28.46-.28.74 0 .59.44 1.01 1.02 1.01.28 0 .53-.11.76-.33l7.79-7.77c.23-.22.35-.49.35-.78Z"/></svg>';
 
 export default function contactForm(root) {
@@ -92,12 +103,37 @@ export default function contactForm(root) {
   }
 
   // Our own check runs before Webflow's submit handler; if anything's missing,
-  // Webflow never sees the submit.
+  // Webflow never sees the submit. The error names each problem, e.g.
+  // "Please add your name and a full email address."
   form.noValidate = true;
+  const check = () => {
+    const problems = [];
+    const missing = [];
+    for (const el of required) {
+      const v = el.value.trim();
+      const rule = RULES[el.name];
+      if (!v) { missing.push(el); problems.push(rule.empty); }
+      else if (!rule.ok(v)) { missing.push(el); problems.push(rule.invalid); }
+    }
+    // "your name, your email address" -> "your name, email address"
+    const tidy = problems.map((p, i) => (i && p.startsWith('your ') && problems[i - 1].startsWith('your ') ? p.slice(5) : p));
+    return { missing, message: tidy.length ? `Please add ${listOf(tidy)}.` : '' };
+  };
+  const showError = (missing, message) => {
+    required.forEach((el) => el.classList.toggle('is-missing', missing.includes(el)));
+    if (!error) return;
+    if (message) error.textContent = message;
+    error.classList.toggle('is-on', missing.length > 0);
+  };
+  // Once the error is showing, keep it up to date as they type
+  required.forEach((el) => el.addEventListener('input', () => {
+    if (!error?.classList.contains('is-on')) return;
+    const { missing, message } = check();
+    showError(missing, message);
+  }));
   form.addEventListener('submit', (e) => {
-    const missing = required.filter((el) => !el.value.trim() || !el.checkValidity());
-    missing.forEach((el) => el.classList.add('is-missing'));
-    error?.classList.toggle('is-on', missing.length > 0);
+    const { missing, message } = check();
+    showError(missing, message);
     if (missing.length) {
       e.preventDefault();
       e.stopImmediatePropagation();
