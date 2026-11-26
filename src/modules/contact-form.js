@@ -102,6 +102,31 @@ export default function contactForm(root) {
       e.preventDefault();
       e.stopImmediatePropagation();
       missing[0].focus();
+      return;
     }
+    // Personalise the thank-you with their first name
+    const first = f('Name')?.value.trim().split(/\s+/)[0];
+    root.querySelectorAll('[data-cf="done-name"]').forEach((s) => { s.textContent = first ? `, ${first}` : ''; });
   }, true);
+
+  // When Webflow shows the thank-you, bring it into view and ease it in
+  const done = root.querySelector('.w-form-done');
+  if (done) {
+    new MutationObserver(() => {
+      if (getComputedStyle(done).display === 'none' || done.dataset.shown) return;
+      done.dataset.shown = '1';
+      window.lenis?.resize?.();
+      const top = done.getBoundingClientRect().top;
+      if (top < 0 || top > window.innerHeight * 0.6) {
+        const y = window.scrollY + top - window.innerHeight * 0.25;
+        window.lenis ? window.lenis.scrollTo(y) : window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        [...done.querySelectorAll('.cf_done > *')].forEach((el, i) => el.animate(
+          [{ opacity: 0, transform: 'translateY(1.25rem)' }, { opacity: 1, transform: 'none' }],
+          { duration: 700, delay: 120 * i, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' },
+        ));
+      }
+    }).observe(done, { attributes: true, attributeFilter: ['style'] });
+  }
 }
