@@ -42,6 +42,14 @@ function addButton(link) {
   // Same colour as the address itself
   button.style.setProperty('--ecg-copy-color', getComputedStyle(link).color);
 
+  // The footer's reveal animates the address with inline transform and opacity;
+  // mirror them so the button rises and fades in with the text, not ahead of it.
+  const follow = () => {
+    ['transform', 'translate', 'opacity', 'visibility'].forEach((p) => { button.style[p] = link.style[p]; });
+  };
+  follow();
+  new MutationObserver(follow).observe(link, { attributes: true, attributeFilter: ['style'] });
+
   const tip = button.querySelector('.ecg-copy_tip');
   let timer = 0, hovered = false, focused = false;
   const sync = () => tip.classList.toggle('is-visible', hovered || focused || !!timer);
